@@ -1,175 +1,135 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Excalibur — железо только для избранных</title>
-  <meta name="description" content="Excalibur — магазин компьютерных комплектующих. Железо только для избранных." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Excalibur — железо только для избранных</title>
+<meta name="description" content="Excalibur — магазин компьютерных комплектующих в игровом неоновом стиле. Железо только для избранных.">
 
-  <!-- ==== Положи изображения рядом с сайтом ==== 
-    /img/bg-hero.jpg                 — игровой фон (1920×1080 или больше)
-    /img/pattern.png                 — полу-прозрачный паттерн (опц.)
-    /img/icons/gpu.png               — иконка раздела Видеокарты (256×256)
-    /img/icons/cpu.png
-    /img/icons/mobo.png
-    /img/icons/ram.png
-    /img/icons/storage.png
-    /img/icons/psu.png
-    /img/icons/cooling.png
-    /img/icons/cases.png
-    /img/icons/periph.png
+<!-- Шрифты (можешь убрать при офлайне) -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    /img/products/gpu/rtx4070ti.png  — карточки товаров (примерные файлы)
-    /img/products/gpu/rtx4060ti.png
-    /img/products/gpu/rx7800xt.png
-    /img/products/gpu/a770.png
+<style>
+  :root{
+    --bg:#090b13; --panel:#11152a; --panel2:#0d1124; --text:#e8ebff; --muted:#aab1db;
+    --acc1:#6b9bff; --acc2:#9f6bff; --ok:#44e1a6; --hot:#ff5c7c;
+    --glass:rgba(255,255,255,.06); --border:rgba(255,255,255,.14);
+    --r:16px; --shadow:0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--border);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--text); background:var(--bg);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; line-height:1.5;
+  }
+  img{max-width:100%; display:block}
+  a{color:inherit; text-decoration:none}
+  .container{max-width:1200px; margin:0 auto; padding:0 16px}
 
-    /img/products/cpu/i5-14600kf.png
-    /img/products/cpu/i7-14700k.png
-    /img/products/cpu/7800x3d.png
-    /img/products/cpu/ryzen5-7600.png
+  /* ==== Фон (игровой) + зерно + параллакс ==== */
+  .bg{position:fixed; inset:0; z-index:-3; background:center/cover no-repeat url("img/hero-bg.jpg"); filter:saturate(1.1) brightness(.85)}
+  .bg::after{content:""; position:absolute; inset:0; background:
+    radial-gradient(1200px 600px at 80% -20%, rgba(22,32,74,.45), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(42,20,85,.4), transparent 60%),
+    linear-gradient(180deg, rgba(9,11,19,.6) 0 40%, rgba(9,11,19,.9) 100%);}
+  .grain{position:fixed; inset:0; z-index:-2; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="); opacity:.06; mix-blend-mode:soft-light}
 
-    ...и т.д. по разделам (можно .jpg/.webp)
-  =============================================== -->
+  /* ==== Header ==== */
+  header{
+    position:sticky; top:0; z-index:50; backdrop-filter: blur(10px);
+    background:linear-gradient(180deg, rgba(9,11,19,.78), rgba(9,11,19,.48));
+    border-bottom:1px solid var(--border);
+  }
+  .nav{height:68px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .logo-badge{
+    width:38px; height:38px; border-radius:10px;
+    background:conic-gradient(from 210deg,#6b9bff 0 25%,#9f6bff 25% 50%,#44e1a6 50% 75%,#ff5c7c 75% 100%);
+    box-shadow:0 0 24px #6b9bff55, inset 0 0 18px #0006; display:grid; place-items:center;
+  }
+  .brand-title{font-family:Orbitron, sans-serif; font-weight:800; letter-spacing:.4px; font-size:20px;
+    background:linear-gradient(90deg,#cfe0ff,#e9d9ff 50%,#b0fff3); -webkit-background-clip:text; color:transparent}
+  .tag{font-size:12px; color:var(--muted); margin-top:-2px}
+  .links{display:flex; gap:16px}
+  .links a{padding:8px 10px; border-radius:10px; color:#dfe4ff}
+  .links a:hover{background:var(--glass)}
+  .cta{display:inline-grid; place-items:center; padding:10px 14px; border-radius:12px; font-weight:800;
+    background:linear-gradient(90deg,#3a64ff,#a45bff); box-shadow:0 10px 24px #6b9bff44}
+  .hamb{display:none; background:none; border:0; color:var(--text)}
+  @media (max-width:900px){ .links{display:none} .hamb{display:block} }
+  .mnav{display:none; border-bottom:1px solid var(--border)}
+  .mnav.open{display:block}
+  .mnav a{display:block; padding:12px 8px; color:#dfe4ff}
+  .mnav .cta{display:inline-block; margin:8px}
 
-  <link rel="preload" as="image" href="img/bg-hero.jpg">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  /* ==== Hero ==== */
+  .hero{padding:56px 0 28px}
+  .grid-hero{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
+  @media (max-width:900px){ .grid-hero{grid-template-columns:1fr} .hero{padding-top:28px} }
+  .h1{font-family:Orbitron, sans-serif; font-size:clamp(28px,5vw,54px); line-height:1.06; margin:10px 0 8px; text-shadow:0 0 20px #6b9bff33}
+  .sub{color:#c8d0fb; max-width:64ch}
+  .pill{display:inline-block; padding:10px 12px; border-radius:999px; background:var(--glass); border:1px solid var(--border); font-weight:600; margin-right:8px}
+  .panel{border:1px solid var(--border); background:linear-gradient(180deg,var(--panel),var(--panel2)); border-radius:var(--r); box-shadow:var(--shadow); padding:16px}
 
-  <style>
-    :root{
-      --bg:#080a12; --panel:#111427; --panel-2:#0d1021;
-      --text:#e9ebff; --muted:#aab1d9;
-      --acc1:#6b9bff; --acc2:#9f6bff; --ok:#44e1a6;
-      --border:rgba(255,255,255,.12); --glass:rgba(255,255,255,.06);
-      --r:16px; --shadow:0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--border);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0; color:var(--text); background: var(--bg) fixed;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      line-height:1.5;
-    }
-    /* Игровой фон с параллаксом */
-    .bg{
-      position:fixed; inset:0; z-index:-2;
-      background: center/cover no-repeat url("img/bg-hero.jpg");
-      filter:saturate(1.1) brightness(.9);
-      transform:translateZ(0);
-    }
-    .bg::after{
-      content:""; position:absolute; inset:0; z-index:1;
-      background:
-        radial-gradient(1200px 600px at 80% -20%, rgba(22,32,74,.45), transparent 60%),
-        radial-gradient(900px 500px at -10% 30%, rgba(42,20,85,.45), transparent 60%),
-        linear-gradient(180deg, rgba(8,10,18,.7) 0 30%, rgba(8,10,18,.85) 60%, rgba(8,10,18,.95) 100%);
-      pointer-events:none;
-    }
-    .grain{
-      position:fixed; inset:0; z-index:-1;
-      background: url("img/pattern.png") repeat;
-      opacity:.08; mix-blend-mode:soft-light;
-      image-rendering:pixelated;
-    }
+  /* ==== Sections ==== */
+  .section{padding:42px 0}
+  .section h2{font-family:Orbitron, sans-serif; font-size:clamp(22px,3.2vw,34px); margin:0 0 14px}
+  .section p.sub{color:var(--muted); margin:0 0 16px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media (max-width:900px){ .two{grid-template-columns:1fr} }
 
-    .container{max-width:1200px; margin:0 auto; padding:0 16px}
-    header{
-      position:sticky; top:0; z-index:50; backdrop-filter: blur(10px);
-      background:linear-gradient(180deg, rgba(8,10,18,.7), rgba(8,10,18,.45));
-      border-bottom:1px solid var(--border);
-    }
-    .nav{height:68px; display:flex; align-items:center; justify-content:space-between; gap:12px}
-    .brand{display:flex; align-items:center; gap:12px}
-    .logo-badge{
-      width:38px; height:38px; border-radius:10px;
-      background:conic-gradient(from 210deg,#6b9bff 0 25%,#9f6bff 25% 50%,#44e1a6 50% 75%,#ff5c7c 75% 100%);
-      box-shadow: 0 0 24px #6b9bff55, inset 0 0 18px #0006;
-      display:grid; place-items:center;
-    }
-    .brand-title{font-family:Orbitron, sans-serif; letter-spacing:.4px; font-weight:800; font-size:20px;
-      background:linear-gradient(90deg,#cfe0ff,#e9d9ff 50%,#b0fff3); -webkit-background-clip:text; color:transparent}
-    .tag{font-size:12px; color:var(--muted); margin-top:-2px}
+  /* ==== Tabs ==== */
+  .tabbar{display:flex; gap:10px; overflow:auto; padding:8px 0 4px; scrollbar-width:none}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tabs button{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; cursor:pointer;
+    border:1px solid var(--border); background:linear-gradient(180deg,#141733,#0f1122); color:#e9ecff; font-weight:800
+  }
+  .tabs button.active{background:linear-gradient(90deg,#3a64ff,#a45bff); box-shadow:0 8px 20px #6b9bff55}
+  .tab-ico{width:22px; height:22px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(107,155,255,.25))}
 
-    .links{display:flex; gap:16px}
-    .links a{padding:8px 10px; border-radius:10px}
-    .links a:hover{background:var(--glass)}
-    .cta{display:inline-grid; place-items:center; padding:10px 14px; border-radius:12px;
-      background:linear-gradient(90deg,#3a64ff,#a45bff); font-weight:800; box-shadow:0 10px 24px #6b9bff44}
-    .hamb{display:none; background:none; border:0; color:var(--text)}
-    @media (max-width:900px){ .links{display:none} .hamb{display:block} }
-    .mobile{display:none; border-bottom:1px solid var(--border)}
-    .mobile.open{display:block}
-    .mobile a{display:block; padding:12px 8px}
+  /* ==== Cards ==== */
+  .grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
+  @media (max-width:1100px){ .grid{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:800px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .grid{grid-template-columns:1fr} }
 
-    /* Hero */
-    .hero{padding:56px 0 24px}
-    .grid-hero{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
-    @media (max-width:900px){ .grid-hero{grid-template-columns:1fr} .hero{padding-top:28px} }
-    .h1{font-family:Orbitron, sans-serif; font-size:clamp(28px,5vw,54px); line-height:1.06; margin:10px 0 8px}
-    .sub{color:#c8d0fb; max-width:60ch}
-    .pill{display:inline-block; padding:10px 12px; border-radius:999px; background:var(--glass); border:1px solid var(--border); font-weight:600; margin-right:8px}
+  .card{border-radius:14px; background:linear-gradient(180deg,#13163a,#0d1024); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; transform:translateZ(0)}
+  .thumb{position:relative; height:180px; background:#0d1126; display:grid; place-items:center; overflow:hidden}
+  .thumb img{width:100%; height:100%; object-fit:contain; transform:translateZ(0); image-rendering:-webkit-optimize-contrast; transition:transform .35s ease, filter .35s ease}
+  .card:hover .thumb img{transform:scale(1.03)}
+  .skeleton{position:absolute; inset:0; background:linear-gradient(90deg,#12162e 0,#1a2044 50%,#12162e 100%); background-size:200% 100%; animation:shimmer 1.8s infinite}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  .card-body{padding:12px}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .flag{font-size:11px; color:#9ad8ff; background:rgba(106,155,255,.14); padding:6px 8px; border-radius:999px; border:1px solid #6b9bff55}
+  .title{margin:0 0 6px; font-weight:800}
+  .spec{color:#b8c0ea; font-size:13px; min-height:38px}
+  .price{font-weight:800; font-size:18px; margin-top:6px}
+  .btn{border:1px solid var(--border); background:linear-gradient(180deg,#171a38,#0e1124); color:#eef; padding:9px 12px; border-radius:10px; font-weight:700; cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,#3a64ff,#a45bff); box-shadow:0 10px 22px #6b9bff55}
+  .btn:hover{transform:translateY(-1px)}
 
-    .panel{border:1px solid var(--border); background:linear-gradient(180deg,var(--panel),var(--panel-2)); border-radius:var(--r); box-shadow:var(--shadow); padding:16px}
+  /* ==== Footer ==== */
+  .hr{height:1px; background:var(--border); margin:22px 0}
+  footer{padding:20px 0 60px; color:#a6aed8}
 
-    /* Tabs */
-    .tabbar{display:flex; gap:10px; overflow:auto; padding:8px 0 4px; scrollbar-width:none}
-    .tabbar::-webkit-scrollbar{display:none}
-    .tabs button{
-      display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; cursor:pointer;
-      border:1px solid var(--border); background:linear-gradient(180deg,#141733,#0f1122); color:#e9ecff; font-weight:800
-    }
-    .tabs button.active{background:linear-gradient(90deg,#3a64ff,#a45bff); box-shadow:0 8px 20px #6b9bff55}
-    .tab-ico{width:22px; height:22px; object-fit:contain; filter:drop-shadow(0 0 6px rgba(107,155,255,.25))}
-    /* Cards */
-    .grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
-    @media (max-width:1100px){ .grid{grid-template-columns:repeat(3,1fr)} }
-    @media (max-width:800px){ .grid{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:520px){ .grid{grid-template-columns:1fr} }
-    .card{border-radius:14px; background:linear-gradient(180deg,#13163a,#0d1024); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden}
-    .thumb{
-      position:relative; height:180px; background:#0d1126;
-      display:grid; place-items:center; overflow:hidden
-    }
-    .thumb img{
-      width:100%; height:100%; object-fit:contain; transform:translateZ(0); image-rendering:-webkit-optimize-contrast;
-      transition:transform .35s ease, filter .35s ease
-    }
-    .card:hover .thumb img{transform:scale(1.03)}
-    .skeleton{position:absolute; inset:0; background:linear-gradient(90deg, #12162e 0, #1a2044 50%, #12162e 100%); background-size:200% 100%; animation:shimmer 1.8s infinite}
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-    .card-body{padding:12px}
-    .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
-    .flag{font-size:11px; color:#9ad8ff; background:rgba(106,155,255,.14); padding:6px 8px; border-radius:999px; border:1px solid #6b9bff55}
-    .title{margin:0 0 6px; font-weight:800}
-    .spec{color:#b8c0ea; font-size:13px; min-height:38px}
-    .price{font-weight:800; font-size:18px; margin-top:6px}
-    .btn{border:1px solid var(--border); background:linear-gradient(180deg,#171a38,#0e1124); color:#eef; padding:9px 12px; border-radius:10px; font-weight:700; cursor:pointer}
-    .btn.primary{background:linear-gradient(90deg,#3a64ff,#a45bff); box-shadow:0 10px 22px #6b9bff55}
-
-    .section{padding:40px 0}
-    .section h2{font-family:Orbitron, sans-serif; font-size:clamp(22px,3.2vw,34px); margin:0 0 16px}
-    .section p.sub{color:var(--muted); margin:0 0 16px}
-    .two{display:grid; grid-template-columns:1fr 1fr; gap:16px}
-    @media (max-width:900px){ .two{grid-template-columns:1fr} }
-
-    footer{padding:24px 0 60px; color:#a6aed8}
-    .hr{height:1px; background:var(--border); margin:24px 0}
-
-    .scrolltop{position:fixed; right:16px; bottom:16px; z-index:60; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease}
-    .scrolltop.show{opacity:1; pointer-events:auto}
-    @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important; scroll-behavior:auto !important} }
-  </style>
+  /* ==== ScrollTop ==== */
+  .scrolltop{position:fixed; right:16px; bottom:16px; z-index:60; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease}
+  .scrolltop.show{opacity:1; pointer-events:auto}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important; scroll-behavior:auto !important} }
+</style>
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
 
+  <!-- ===== Header ===== -->
   <header>
     <div class="container nav">
       <div class="brand">
         <div class="logo-badge" aria-hidden="true">
-          <!-- меч -->
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <path d="M13 3l8 8-2 2-3-3-7.5 7.5a4 4 0 01-3 1.5H4v-1.5a4 4 0 011.5-3L13 8l-3-3 2-2z" stroke="#eaf1ff" stroke-width="1.6"/>
           </svg>
@@ -193,21 +153,22 @@
         </svg>
       </button>
     </div>
-    <div id="mnav" class="container mobile">
+    <div id="mnav" class="container mnav">
       <a href="#hero">Главная</a>
       <a href="#catalog">Каталог</a>
       <a href="#about">О нас</a>
       <a href="#contact">Контакты</a>
-      <a class="cta" href="#catalog" style="display:inline-block;margin-top:8px;">В каталог</a>
+      <a class="cta" href="#catalog">Перейти в каталог</a>
     </div>
   </header>
 
-  <section id="hero" class="hero">
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
     <div class="container grid-hero">
       <div>
         <span class="pill">Сборки • Апгрейд • Сервис</span>
         <h1 class="h1">Игровое железо с характером. <br>Картинки — реальные, FPS — честный.</h1>
-        <p class="sub">Глубокий неоновый стиль + живые изображения комплектующих. Выбирай разделы по иконкам, листай карточки — всё адаптировано под телефон.</p>
+        <p class="sub">Живые изображения всех комплектующих, иконки в разделах, плавные анимации и адаптация под iPhone/Android и ПК. Выбирай разделы — собирай билд.</p>
         <div style="margin-top:14px; display:flex; gap:12px; flex-wrap:wrap">
           <a class="cta" href="#catalog">Открыть каталог</a>
           <a class="btn" href="#about">Почему мы?</a>
@@ -237,11 +198,11 @@
     </div>
   </section>
 
-  <!-- ====== КАТАЛОГ ====== -->
+  <!-- ===== Catalog ===== -->
   <section id="catalog" class="section">
     <div class="container">
       <h2>Каталог</h2>
-      <p class="sub">Вкладки с **реальными иконками**. На карточках — изображения комплектующих.</p>
+      <p class="sub">Вкладки с **иконками**. На карточках — реальные изображения комплектующих.</p>
 
       <div class="tabbar">
         <div class="tabs" id="tabs" role="tablist" aria-label="Разделы каталога">
@@ -249,7 +210,7 @@
           <button role="tab" data-tab="cpu"><img class="tab-ico" src="img/icons/cpu.png" alt="">Процессоры</button>
           <button role="tab" data-tab="mobo"><img class="tab-ico" src="img/icons/mobo.png" alt="">Материнские платы</button>
           <button role="tab" data-tab="ram"><img class="tab-ico" src="img/icons/ram.png" alt="">Оперативная память</button>
-          <button role="tab" data-tab="storage"><img class="tab-ico" src="img/icons/storage.png" alt="">Накопители</button>
+          <button role="tab" data-tab="storage"><img class="tab-ico" src="img/icons/storage.png" alt="">SSD/HDD</button>
           <button role="tab" data-tab="psu"><img class="tab-ico" src="img/icons/psu.png" alt="">Блоки питания</button>
           <button role="tab" data-tab="cooling"><img class="tab-ico" src="img/icons/cooling.png" alt="">Охлаждение</button>
           <button role="tab" data-tab="cases"><img class="tab-ico" src="img/icons/cases.png" alt="">Корпуса</button>
@@ -261,11 +222,12 @@
     </div>
   </section>
 
+  <!-- ===== About & Contact ===== -->
   <section id="about" class="section">
     <div class="container two">
       <div class="panel">
         <h2 style="font-size:24px">Почему Excalibur?</h2>
-        <p class="sub">Мы ставим реальное изображение там, где другие рисуют пиктограммы.</p>
+        <p class="sub">Мы ставим реальные изображения там, где другие рисуют пиктограммы.</p>
         <ul style="margin:0; padding-left:18px; color:#c9d1ff">
           <li>Подбор без «бутылочных горлышек».</li>
           <li>BIOS, XMP/EXPO, кривые вентиляторов — настроим.</li>
@@ -274,14 +236,14 @@
       </div>
       <div id="contact" class="panel">
         <h2 style="font-size:24px">Связаться</h2>
-        <form onsubmit="event.preventDefault(); alert('Заявка отправлена. Свяжемся!'); this.reset();">
+        <form onsubmit="event.preventDefault(); toast('Заявка отправлена. Свяжемся!'); this.reset();">
           <div class="two" style="gap:10px">
             <input required placeholder="Ваше имя" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0c0f22;color:var(--text)">
             <input required placeholder="Телефон/Telegram" style="padding:12px;border-radius:10px;border:1px solid var(--border);background:#0c0f22;color:var(--text)">
           </div>
           <textarea rows="4" placeholder="Опишите сборку/задачи" style="margin-top:10px;width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:#0c0f22;color:var(--text)"></textarea>
           <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap">
-            <button class="btn primary">Отправить</button>
+            <button class="btn primary" type="submit">Отправить</button>
             <a class="btn" href="#catalog">Каталог</a>
           </div>
         </form>
@@ -297,129 +259,143 @@
     </div>
   </footer>
 
+  <!-- Scroll to top -->
   <button id="up" class="btn primary scrolltop" aria-label="Наверх">↑</button>
 
-  <script>
-    // ======= ДАННЫЕ (картинки обязательны) =======
-    const PRODUCTS = {
-      gpu: [
-        {title:'GeForce RTX 4070 Ti Super', spec:'16 ГБ GDDR6X, DLSS 3', price:'от 89 990 ₽', img:'img/products/gpu/rtx4070ti.png'},
-        {title:'GeForce RTX 4060 Ti 16 ГБ', spec:'DLSS 3, энергоэффективность', price:'от 49 990 ₽', img:'img/products/gpu/rtx4060ti.png'},
-        {title:'Radeon RX 7800 XT', spec:'16 ГБ GDDR6, FSR 3', price:'от 62 990 ₽', img:'img/products/gpu/rx7800xt.png'},
-        {title:'Intel Arc A770 16 ГБ', spec:'XeSS, AV1', price:'от 34 990 ₽', img:'img/products/gpu/a770.png'},
-      ],
-      cpu: [
-        {title:'Intel Core i5-14600KF', spec:'6P+8E, 5.3 ГГц', price:'от 32 990 ₽', img:'img/products/cpu/i5-14600kf.png'},
-        {title:'Intel Core i7-14700K', spec:'8P+12E, 5.6 ГГц', price:'от 49 990 ₽', img:'img/products/cpu/i7-14700k.png'},
-        {title:'AMD Ryzen 7 7800X3D', spec:'3D V-Cache, топ в играх', price:'от 46 990 ₽', img:'img/products/cpu/7800x3d.png'},
-        {title:'AMD Ryzen 5 7600', spec:'AM5, DDR5', price:'от 21 990 ₽', img:'img/products/cpu/ryzen5-7600.png'},
-      ],
-      mobo: [
-        {title:'B760 (LGA1700)', spec:'PCIe 4.0, 2×M.2', price:'от 14 990 ₽', img:'img/products/mobo/b760.png'},
-        {title:'Z790 (LGA1700)', spec:'PCIe 5.0, разгон', price:'от 28 990 ₽', img:'img/products/mobo/z790.png'},
-        {title:'B650 (AM5)', spec:'DDR5, NVMe Gen4', price:'от 17 990 ₽', img:'img/products/mobo/b650.png'},
-        {title:'X670E (AM5)', spec:'PCIe 5.0', price:'от 39 990 ₽', img:'img/products/mobo/x670e.png'},
-      ],
-      ram: [
-        {title:'32 ГБ DDR5-6000', spec:'CL30–36, дуал-ч', price:'от 11 990 ₽', img:'img/products/ram/ddr5-32.png'},
-        {title:'64 ГБ DDR5-6000', spec:'Тяжёлые проекты', price:'от 22 990 ₽', img:'img/products/ram/ddr5-64.png'},
-        {title:'32 ГБ DDR4-3600', spec:'LGA1200/AM4', price:'от 7 990 ₽', img:'img/products/ram/ddr4-32.png'},
-        {title:'16 ГБ DDR4-3200', spec:'Бюджет', price:'от 3 990 ₽', img:'img/products/ram/ddr4-16.png'},
-      ],
-      storage: [
-        {title:'NVMe SSD Gen4 1 ТБ', spec:'до 7000 МБ/с', price:'от 6 490 ₽', img:'img/products/storage/nvme-g4-1tb.png'},
-        {title:'NVMe SSD Gen4 2 ТБ', spec:'Игры + проекты', price:'от 10 990 ₽', img:'img/products/storage/nvme-g4-2tb.png'},
-        {title:'SATA SSD 1 ТБ', spec:'Надёжно', price:'от 4 990 ₽', img:'img/products/storage/sata-1tb.png'},
-        {title:'HDD 4 ТБ', spec:'Архив', price:'от 6 990 ₽', img:'img/products/storage/hdd-4tb.png'},
-      ],
-      psu: [
-        {title:'750W Gold (modular)', spec:'Тихий, запас', price:'от 7 990 ₽', img:'img/products/psu/750g.png'},
-        {title:'850W Gold', spec:'Для 4070 Ti/4080', price:'от 9 990 ₽', img:'img/products/psu/850g.png'},
-        {title:'1000W Platinum', spec:'Энтузиаст', price:'от 16 990 ₽', img:'img/products/psu/1000p.png'},
-        {title:'650W Bronze', spec:'Mid-range', price:'от 4 990 ₽', img:'img/products/psu/650b.png'},
-      ],
-      cooling: [
-        {title:'AIO 360 мм', spec:'Тихо и холодно', price:'от 12 990 ₽', img:'img/products/cooling/aio360.png'},
-        {title:'AIO 240 мм', spec:'Компакт', price:'от 8 990 ₽', img:'img/products/cooling/aio240.png'},
-        {title:'Башня 6 трубок', spec:'Отличный воздух', price:'от 5 990 ₽', img:'img/products/cooling/tower.png'},
-        {title:'Вентиляторы 120 (3шт)', spec:'PWM, ARGB', price:'от 2 990 ₽', img:'img/products/cooling/fans3.png'},
-      ],
-      cases: [
-        {title:'Mid-Tower Airflow', spec:'Сетка, стекло', price:'от 6 990 ₽', img:'img/products/cases/airflow.png'},
-        {title:'Compact mATX', spec:'Минимализм', price:'от 5 890 ₽', img:'img/products/cases/matx.png'},
-        {title:'Premium ATX', spec:'Алюминий', price:'от 12 990 ₽', img:'img/products/cases/premium.png'},
-        {title:'ITX Cube', spec:'Мал да удал', price:'от 8 990 ₽', img:'img/products/cases/itx.png'},
-      ],
-      periph: [
-        {title:'Клава механика', spec:'Hot-swap, PBT', price:'от 5 990 ₽', img:'img/products/periph/kb.png'},
-        {title:'Мышь eSports', spec:'<60 г, 26K DPI', price:'от 3 990 ₽', img:'img/products/periph/mouse.png'},
-        {title:'Гарнитура', spec:'Позиционка', price:'от 4 990 ₽', img:'img/products/periph/headset.png'},
-        {title:'Монитор 27" 165 Гц', spec:'IPS/VA, 1440p', price:'от 16 990 ₽', img:'img/products/periph/monitor27.png'},
-      ],
-    };
+  <!-- Toast -->
+  <div id="toast" style="position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:80;background:rgba(20,24,48,.92);border:1px solid var(--border);color:#dfe4ff;padding:10px 14px;border-radius:12px;display:none"></div>
 
-    // ======= Рендер карточек =======
-    const grid = document.getElementById('grid');
-    function cardHTML(p, idx){
-      return `
-        <article class="card">
-          <div class="thumb">
-            <span class="skeleton" aria-hidden="true"></span>
-            <img src="${p.img}" alt="${p.title}" loading="lazy" decoding="async"
-              onload="this.previousElementSibling?.remove()" onerror="this.closest('.thumb').style.background='#121735'">
+<script>
+  // ===== ДАННЫЕ (подставь свои изображения в img/... ) =====
+  const PRODUCTS = {
+    gpu: [
+      {title:'GeForce RTX 4070 Ti Super', spec:'16 ГБ GDDR6X, DLSS 3', price:'от 89 990 ₽', img:'img/products/gpu/rtx4070ti.png'},
+      {title:'GeForce RTX 4060 Ti 16 ГБ', spec:'DLSS 3, энергоэффективность', price:'от 49 990 ₽', img:'img/products/gpu/rtx4060ti.png'},
+      {title:'Radeon RX 7800 XT', spec:'16 ГБ GDDR6, FSR 3', price:'от 62 990 ₽', img:'img/products/gpu/rx7800xt.png'},
+      {title:'Intel Arc A770 16 ГБ', spec:'XeSS, AV1', price:'от 34 990 ₽', img:'img/products/gpu/a770.png'},
+    ],
+    cpu: [
+      {title:'Intel Core i5-14600KF', spec:'6P+8E, 5.3 ГГц', price:'от 32 990 ₽', img:'img/products/cpu/i5-14600kf.png'},
+      {title:'Intel Core i7-14700K', spec:'8P+12E, 5.6 ГГц', price:'от 49 990 ₽', img:'img/products/cpu/i7-14700k.png'},
+      {title:'AMD Ryzen 7 7800X3D', spec:'3D V-Cache, топ в играх', price:'от 46 990 ₽', img:'img/products/cpu/7800x3d.png'},
+      {title:'AMD Ryzen 5 7600', spec:'AM5, DDR5', price:'от 21 990 ₽', img:'img/products/cpu/ryzen5-7600.png'},
+    ],
+    mobo: [
+      {title:'B760 (LGA1700)', spec:'PCIe 4.0, 2×M.2', price:'от 14 990 ₽', img:'img/products/mobo/b760.png'},
+      {title:'Z790 (LGA1700)', spec:'PCIe 5.0, разгон', price:'от 28 990 ₽', img:'img/products/mobo/z790.png'},
+      {title:'B650 (AM5)', spec:'DDR5, NVMe Gen4', price:'от 17 990 ₽', img:'img/products/mobo/b650.png'},
+      {title:'X670E (AM5)', spec:'PCIe 5.0', price:'от 39 990 ₽', img:'img/products/mobo/x670e.png'},
+    ],
+    ram: [
+      {title:'32 ГБ DDR5-6000', spec:'CL30–36, дуал-ч', price:'от 11 990 ₽', img:'img/products/ram/ddr5-32.png'},
+      {title:'64 ГБ DDR5-6000', spec:'Тяжёлые проекты', price:'от 22 990 ₽', img:'img/products/ram/ddr5-64.png'},
+      {title:'32 ГБ DDR4-3600', spec:'LGA1200/AM4', price:'от 7 990 ₽', img:'img/products/ram/ddr4-32.png'},
+      {title:'16 ГБ DDR4-3200', spec:'Бюджет', price:'от 3 990 ₽', img:'img/products/ram/ddr4-16.png'},
+    ],
+    storage: [
+      {title:'NVMe SSD Gen4 1 ТБ', spec:'до 7000 МБ/с', price:'от 6 490 ₽', img:'img/products/storage/nvme-g4-1tb.png'},
+      {title:'NVMe SSD Gen4 2 ТБ', spec:'Игры + проекты', price:'от 10 990 ₽', img:'img/products/storage/nvme-g4-2tb.png'},
+      {title:'SATA SSD 1 ТБ', spec:'Надёжно', price:'от 4 990 ₽', img:'img/products/storage/sata-1tb.png'},
+      {title:'HDD 4 ТБ', spec:'Архив', price:'от 6 990 ₽', img:'img/products/storage/hdd-4tb.png'},
+    ],
+    psu: [
+      {title:'750W Gold (modular)', spec:'Тихий, запас', price:'от 7 990 ₽', img:'img/products/psu/750g.png'},
+      {title:'850W Gold', spec:'Для 4070 Ti/4080', price:'от 9 990 ₽', img:'img/products/psu/850g.png'},
+      {title:'1000W Platinum', spec:'Энтузиаст', price:'от 16 990 ₽', img:'img/products/psu/1000p.png'},
+      {title:'650W Bronze', spec:'Mid-range', price:'от 4 990 ₽', img:'img/products/psu/650b.png'},
+    ],
+    cooling: [
+      {title:'AIO 360 мм', spec:'Тихо и холодно', price:'от 12 990 ₽', img:'img/products/cooling/aio360.png'},
+      {title:'AIO 240 мм', spec:'Компакт', price:'от 8 990 ₽', img:'img/products/cooling/aio240.png'},
+      {title:'Башня 6 трубок', spec:'Отличный воздух', price:'от 5 990 ₽', img:'img/products/cooling/tower.png'},
+      {title:'Вентиляторы 120 (3шт)', spec:'PWM, ARGB', price:'от 2 990 ₽', img:'img/products/cooling/fans3.png'},
+    ],
+    cases: [
+      {title:'Mid-Tower Airflow', spec:'Сетка, стекло', price:'от 6 990 ₽', img:'img/products/cases/airflow.png'},
+      {title:'Compact mATX', spec:'Минимализм', price:'от 5 890 ₽', img:'img/products/cases/matx.png'},
+      {title:'Premium ATX', spec:'Алюминий', price:'от 12 990 ₽', img:'img/products/cases/premium.png'},
+      {title:'ITX Cube', spec:'Мал да удал', price:'от 8 990 ₽', img:'img/products/cases/itx.png'},
+    ],
+    periph: [
+      {title:'Клава механика', spec:'Hot-swap, PBT', price:'от 5 990 ₽', img:'img/products/periph/kb.png'},
+      {title:'Мышь eSports', spec:'<60 г, 26K DPI', price:'от 3 990 ₽', img:'img/products/periph/mouse.png'},
+      {title:'Гарнитура', spec:'Позиционка', price:'от 4 990 ₽', img:'img/products/periph/headset.png'},
+      {title:'Монитор 27&quot; 165 Гц', spec:'IPS/VA, 1440p', price:'от 16 990 ₽', img:'img/products/periph/monitor27.png'},
+    ],
+  };
+
+  // ===== Рендер карточек =====
+  const grid = document.getElementById('grid');
+  function cardHTML(p, idx){
+    return `
+      <article class="card">
+        <div class="thumb">
+          <span class="skeleton" aria-hidden="true"></span>
+          <img src="${p.img}" alt="${p.title}" loading="lazy" decoding="async"
+            onload="this.previousElementSibling?.remove()" onerror="this.closest('.thumb').style.background='#121735'">
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <h3 class="title">${p.title}</h3>
+            <span class="flag">${idx===0?'Хит':'Новинка'}</span>
           </div>
-          <div class="card-body">
-            <div class="row">
-              <h3 class="title">${p.title}</h3>
-              <span class="flag">${idx === 0 ? 'Хит' : 'Новинка'}</span>
-            </div>
-            <div class="spec">${p.spec}</div>
-            <div class="row" style="margin-top:8px">
-              <div class="price">${p.price}</div>
-              <div style="display:flex;gap:8px">
-                <button class="btn">Сравнить</button>
-                <button class="btn primary">В корзину</button>
-              </div>
+          <div class="spec">${p.spec}</div>
+          <div class="row" style="margin-top:8px">
+            <div class="price">${p.price}</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" onclick="toast('Добавлено в сравнение')">Сравнить</button>
+              <button class="btn primary" onclick="toast('Добавлено в корзину')">В корзину</button>
             </div>
           </div>
-        </article>`;
-    }
-    function render(kind='gpu'){
-      grid.innerHTML = PRODUCTS[kind].map(cardHTML).join('');
-    }
+        </div>
+      </article>`;
+  }
+  function render(kind='gpu'){ grid.innerHTML = (PRODUCTS[kind]||[]).map(cardHTML).join(''); }
 
-    // ======= Вкладки =======
-    const tabs = document.getElementById('tabs');
-    tabs.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-tab]');
-      if(!btn) return;
-      document.querySelectorAll('#tabs button').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      render(btn.dataset.tab);
-    });
+  // ===== Вкладки =====
+  const tabs = document.getElementById('tabs');
+  tabs.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-tab]');
+    if(!btn) return;
+    document.querySelectorAll('#tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.tab);
+  });
 
-    // ======= Мобильное меню =======
-    const hamb = document.getElementById('hamb');
-    const mnav = document.getElementById('mnav');
-    hamb.addEventListener('click', ()=> mnav.classList.toggle('open'));
-    mnav.addEventListener('click', e=>{ if(e.target.tagName==='A') mnav.classList.remove('open') });
+  // ===== Мобильное меню =====
+  const hamb = document.getElementById('hamb');
+  const mnav = document.getElementById('mnav');
+  hamb.addEventListener('click', ()=> mnav.classList.toggle('open'));
+  mnav.addEventListener('click', e=>{ if(e.target.tagName==='A') mnav.classList.remove('open') });
 
-    // ======= Наверх =======
-    const up = document.getElementById('up');
-    window.addEventListener('scroll', ()=>{ if(scrollY>300) up.classList.add('show'); else up.classList.remove('show') });
-    up.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+  // ===== ScrollTop =====
+  const up = document.getElementById('up');
+  window.addEventListener('scroll', ()=>{ if(scrollY>300) up.classList.add('show'); else up.classList.remove('show') });
+  up.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
 
-    // ======= Год и старт =======
-    document.getElementById('year').textContent = new Date().getFullYear();
-    render('gpu');
+  // ===== Year =====
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Лёгкий параллакс фона
-    const bg = document.querySelector('.bg');
-    window.addEventListener('mousemove', (e)=>{
-      const x = (e.clientX / innerWidth - .5) * 8;
-      const y = (e.clientY / innerHeight - .5) * 8;
-      bg.style.transform = `translate(${x}px, ${y}px) scale(1.02)`;
-    }, {passive:true});
-  </script>
+  // ===== Параллакс фона =====
+  const bg = document.querySelector('.bg');
+  window.addEventListener('mousemove', (e)=>{
+    const x = (e.clientX / innerWidth - .5) * 8;
+    const y = (e.clientY / innerHeight - .5) * 8;
+    bg.style.transform = `translate(${x}px, ${y}px) scale(1.02)`;
+  }, {passive:true});
+
+  // ===== Toast =====
+  const toastEl = document.getElementById('toast');
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.style.display='inline-block';
+    clearTimeout(toastEl._t);
+    toastEl._t=setTimeout(()=>toastEl.style.display='none',1600);
+  }
+  window.toast = toast;
+
+  // ===== Старт =====
+  render('gpu');
+</script>
 </body>
 </html>
